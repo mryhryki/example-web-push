@@ -43,9 +43,10 @@
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
           new Notification("Permission granted", {
             body: "You can receive web push notification",
+            icon: "https://example-web-push.deno.dev/icon.png",
+            requireInteraction: true,
             tag: "permission-granted",
             vibrate: 500,
-            requireInteraction: true,
           })
         })
       })
