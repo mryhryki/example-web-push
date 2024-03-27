@@ -1,9 +1,11 @@
 Deno.serve(async (request): Promise<Response> => {
-  const path = request.url.endsWith("/") ? `${request.url}index.html` : request.url;
+  const {pathname} = new URL(request.url)
+  const filePath = pathname.endsWith("/") ? `./static${pathname}index.html` : `./static${pathname}`;
 
-  const html = await Deno.readFile(`./static${path}`).catch(() => null);
+  const html = await Deno.readFile(filePath).catch(() => null);
   if (html != null) {
     return new Response(html, {
+      status: 200,
       headers: new Headers({
         "Content-Type": "text/html; charset=utf-8",
       }),
