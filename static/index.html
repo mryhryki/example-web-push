@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>example-web-push</title>
+  </head>
+  <body style="width: 100vw; max-width: 800px; margin: 0 auto;">
+    <h1 style="text-align: center;">
+      <a href="https://github.com/mryhryki/example-web-push">
+        mryhryki/example-web-push
+      </a>
+    </h1>
+
+    <p style="text-align: center">
+      <button id="subscribe-button" style="padding: 0.5rem 1rem;">Subscribe</button>
+    </p>
+
+    <script>
+      // TODO: Register service worker
+      window.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("subscribe-button").addEventListener("click", async () => {
+          // TODO: https://developer.mozilla.org/docs/Web/API/Push_API
+        })
+      })
+    </script>
+  </body>
+</html>
