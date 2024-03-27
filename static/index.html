@@ -13,7 +13,7 @@
     </h1>
 
     <p style="text-align: center">
-      <button id="subscribe-button" style="padding: 0.5rem 1rem;">Subscribe</button>
+      <button id="subscribe-button" style="padding: 0.5rem 1rem; font-size: 1.5rem;">Subscribe</button>
     </p>
 
     <script>
@@ -28,8 +28,25 @@
 
 
       window.addEventListener("DOMContentLoaded", () => {
+        if (!("Notification" in window)) {
+          console.error("This browser does not support web push notification")
+          return
+        }
+
         document.getElementById("subscribe-button").addEventListener("click", async () => {
           // TODO: https://developer.mozilla.org/docs/Web/API/Push_API
+          const permission = await Notification.requestPermission()
+          if (permission !== "granted") {
+            console.error("Permission denied")
+            return
+          }
+          // https://developer.mozilla.org/docs/Web/API/Notification/Notification
+          new Notification("Permission granted", {
+            body: "You can receive web push notification",
+            tag: "permission-granted",
+            vibrate: 500,
+            requireInteraction: true,
+          })
         })
       })
     </script>
