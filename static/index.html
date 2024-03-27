@@ -17,7 +17,16 @@
     </p>
 
     <script>
-      // TODO: Register service worker
+      (async() => {
+        if ("serviceWorker" in navigator) {
+          const registration = await navigator.serviceWorker.register("/service-worker.js")
+          console.log("ServiceWorker registration successful with scope: ", registration.scope)
+        } else {
+          console.error("ServiceWorker not supported")
+        }
+      })()
+
+
       window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("subscribe-button").addEventListener("click", async () => {
           // TODO: https://developer.mozilla.org/docs/Web/API/Push_API
