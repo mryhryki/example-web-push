@@ -7,7 +7,7 @@ Deno.serve(async (request): Promise<Response> => {
     return new Response(html, {
       status: 200,
       headers: new Headers({
-        "Content-Type": "text/html; charset=utf-8",
+        "Content-Type": getMimeType(filePath),
       }),
     });
   }
@@ -19,3 +19,12 @@ Deno.serve(async (request): Promise<Response> => {
     }),
   });
 });
+
+const getMimeType = (filePath: string): string => {
+  if (filePath.endsWith(".html")) {
+    return "text/html; charset=utf-8";
+  } else if (filePath.endsWith(".js")) {
+    return "text/javascript";
+  }
+  return "text/plain; charset=utf-8";
+}
