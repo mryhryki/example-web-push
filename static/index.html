@@ -17,9 +17,10 @@
     </p>
 
     <script>
+      let registration = null;
       (async() => {
         if ("serviceWorker" in navigator) {
-          const registration = await navigator.serviceWorker.register("/service-worker.js")
+          registration = await navigator.serviceWorker.register("/service-worker.js")
           console.log("ServiceWorker registration successful with scope: ", registration.scope)
         } else {
           console.error("ServiceWorker not supported")
@@ -34,20 +35,30 @@
         }
 
         document.getElementById("subscribe-button").addEventListener("click", async () => {
-          // TODO: https://developer.mozilla.org/docs/Web/API/Push_API
-          const permission = await Notification.requestPermission()
-          if (permission !== "granted") {
-            console.error("Permission denied")
+          if (registration == null) {
+            console.error("ServiceWorker registration failed")
             return
           }
+          const keyPair = await crypto.subtle.generateKey({
+            name: 'ECDSA',
+            namedCurve: 'P-256'
+          }, false, ['sign', 'verify'])
+          const publicKey = await crypto.subtle.exportKey('raw', keyPair.publicKey);
+          console.debug('###', JSON.stringify({ publicKey}, null, 2))
+
+          const permission = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: publicKey
+          });
+          console.log(permission)
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
-          new Notification("Permission granted", {
-            body: "You can receive web push notification",
-            icon: "https://example-web-push.deno.dev/icon.png",
-            requireInteraction: true,
-            tag: "permission-granted",
-            vibrate: 500,
-          })
+          // new Notification("Permission granted", {
+          //   body: "You can receive web push notification",
+          //   icon: "https://example-web-push.deno.dev/icon.png",
+          //   requireInteraction: true,
+          //   tag: "permission-granted",
+          //   vibrate: 500,
+          // })
         })
       })
     </script>
