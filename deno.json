@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "init": "deno run -A ./script/generate_key.ts",
+    "dev": "deno run -A ./index.ts"
+  }
+}
