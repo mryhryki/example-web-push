@@ -17,6 +17,10 @@
     </p>
 
     <p id="permission-endpoint" style="text-align: center; overflow-wrap: anywhere;"></p>
+    <p style="text-align: center">
+      <button id="publish-message" style="padding: 0.5rem 1rem; font-size: 1.5rem;">Publish Message</button>
+    </p>
+
 
     <script type="module">
       let registration = null;
@@ -56,6 +60,20 @@
             requireInteraction: true,
             tag: "permission-granted",
             vibrate: 500,
+          })
+
+          document.getElementById("publish-message").addEventListener("click", async () => {
+            const response = await fetch("/publish-message", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                endpoint: permission.endpoint,
+                message: "Hello, world!"
+              })
+            })
+            console.debug("Publish Response:", response)
           })
         })
       })
