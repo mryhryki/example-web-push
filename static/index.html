@@ -75,7 +75,8 @@
               },
               body: JSON.stringify({
                 endpoint: subscription.endpoint,
-                message: "Hello, world!"
+                message: "Hello, world!",
+                subscription: { auth, p256dh },
               })
             })
             console.debug("Publish Response:", response)
