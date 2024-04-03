@@ -15,6 +15,10 @@ Deno.serve(async (request): Promise<Response> => {
     ? `./static${pathname}index.html`
     : `./static${pathname}`;
 
+  if (request.method === "POST" && pathname === "/publish-message") {
+    return await publishMessage(request);
+  }
+
   const html: Uint8Array | null = await Deno.readFile(filePath).catch(() =>
     null
   );
@@ -52,4 +56,10 @@ const getMimeType = (filePath: string): string => {
     return "text/javascript";
   }
   return "text/plain; charset=utf-8";
+};
+
+const publishMessage = async (request: Request): Promise<Response> => {
+  const { endpoint, message } = await request.json();
+  console.log("Payload:", JSON.stringify({ endpoint, message }));
+  return new Response("OK");
 };
