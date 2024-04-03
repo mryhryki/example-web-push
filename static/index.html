@@ -54,13 +54,13 @@
           document.getElementById("permission-endpoint").innerText = permission.endpoint;
 
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
-          new Notification("Permission granted", {
-            body: "You can receive web push notification",
-            icon: "https://example-web-push.deno.dev/icon.png",
-            requireInteraction: true,
-            tag: "permission-granted",
-            vibrate: 500,
-          })
+          // new Notification("Permission granted", {
+          //   body: "You can receive web push notification",
+          //   icon: "https://example-web-push.deno.dev/icon.png",
+          //   requireInteraction: true,
+          //   tag: "permission-granted",
+          //   vibrate: 500,
+          // })
 
           document.getElementById("publish-message").addEventListener("click", async () => {
             const response = await fetch("/publish-message", {
