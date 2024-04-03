@@ -16,7 +16,9 @@
       <button id="subscribe-button" style="padding: 0.5rem 1rem; font-size: 1.5rem;">Subscribe</button>
     </p>
 
-    <script>
+    <script type="module">
+      import { encodeBase64, decodeBase64 } from "https://deno.land/std@0.221.0/encoding/base64.ts";
+
       let registration = null;
       (async() => {
         if ("serviceWorker" in navigator) {
@@ -44,13 +46,14 @@
             namedCurve: 'P-256'
           }, false, ['sign', 'verify'])
           const publicKey = '[[PUBLIC-KEY]]';
-          console.debug('###', JSON.stringify({ publicKey }, null, 2))
+          console.debug('###', decodeBase64(publicKey))
 
           const permission = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: publicKey
           });
           console.log(permission)
+
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
           // new Notification("Permission granted", {
           //   body: "You can receive web push notification",
