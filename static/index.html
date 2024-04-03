@@ -45,13 +45,17 @@
             return
           }
           const publicKey = '[[PUBLIC-KEY]]';
-          const permission = await registration.pushManager.subscribe({
+          const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: false,
             applicationServerKey: publicKey
           });
-          console.debug("Permission:", permission)
+          console.debug("Subscription:", subscription)
+          const auth = subscription.getKey("auth");
+          const p256dh = subscription.getKey("p256dh");
+          console.log("Subscription.auth:", auth)
+          console.log("Subscription.p256dh:", p256dh)
 
-          document.getElementById("permission-endpoint").innerText = permission.endpoint;
+          document.getElementById("permission-endpoint").innerText = subscription.endpoint;
 
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
           // new Notification("Permission granted", {
@@ -69,7 +73,7 @@
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                endpoint: permission.endpoint,
+                endpoint: subscription.endpoint,
                 message: "Hello, world!"
               })
             })
