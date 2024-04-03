@@ -9,7 +9,10 @@ const keyPair = await crypto.subtle.generateKey(
   false,
   ["sign", "verify"],
 );
-const exportedPublicKey = await crypto.subtle.exportKey("raw", keyPair.publicKey);
+const exportedPublicKey = await crypto.subtle.exportKey(
+  "raw",
+  keyPair.publicKey,
+);
 const base64EncodedPublicKey = encodeBase64(new Uint8Array(exportedPublicKey));
 
 Deno.serve(async (request): Promise<Response> => {
@@ -28,7 +31,12 @@ Deno.serve(async (request): Promise<Response> => {
   if (html != null) {
     const htmlString = new TextDecoder().decode(html).replace(
       "'[[PUBLIC-KEY]]'",
-      JSON.stringify(base64EncodedPublicKey.replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "")),
+      JSON.stringify(
+        base64EncodedPublicKey.replace(/\+/g, "-").replace(/\//g, "_").replace(
+          /=/g,
+          "",
+        ),
+      ),
     );
     return new Response(htmlString, {
       status: 200,
@@ -66,10 +74,11 @@ const publishMessage = async (request: Request): Promise<Response> => {
     .setSubject("mailto:mryhryki@gmail.com")
     .sign(keyPair.privateKey);
 
-  return fetch(endpoint, {
-    headers: {
-      "Crypto-Key": `p256ecdsa=${base64EncodedPublicKey}`,
-      Authorization: `WebPush ${jwt}`,
-    },
+  const headers = new Headers({
+    "Crypto-Key": `p256ecdsa=${base64EncodedPublicKey}`,
+    Authorization: `WebPush ${jwt}`,
   });
+  console.log("Headers:", JSON.stringify(headers.entries()));
+
+  return fetch(endpoint, { headers });
 };
