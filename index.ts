@@ -12,7 +12,7 @@ Deno.serve(async (request): Promise<Response> => {
   const html: Uint8Array | null = await Deno.readFile(filePath).catch(() => null);
   if (html != null) {
     const publicKey = await crypto.subtle.exportKey("raw", keyPair.publicKey)
-    const htmlString = new TextDecoder().decode(html).replace("'[[PUBLIC-KEY]]'", encodeBase64(new Uint8Array(publicKey)));
+    const htmlString = new TextDecoder().decode(html).replace("'[[PUBLIC-KEY]]'", JSON.stringify(encodeBase64(new Uint8Array(publicKey))));
     return new Response(htmlString, {
       status: 200,
       headers: new Headers({
