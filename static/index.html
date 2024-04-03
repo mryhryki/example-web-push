@@ -29,7 +29,6 @@
         }
       })()
 
-
       window.addEventListener("DOMContentLoaded", () => {
         if (!("Notification" in window)) {
           console.error("This browser does not support web push notification")
@@ -41,27 +40,21 @@
             console.error("ServiceWorker registration failed")
             return
           }
-          const keyPair = await crypto.subtle.generateKey({
-            name: 'ECDSA',
-            namedCurve: 'P-256'
-          }, false, ['sign', 'verify'])
           const publicKey = '[[PUBLIC-KEY]]';
-          console.debug('###', decodeBase64(publicKey))
-
           const permission = await registration.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: publicKey
           });
-          console.log(permission)
+          console.debug("Permission:", permission)
 
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
-          // new Notification("Permission granted", {
-          //   body: "You can receive web push notification",
-          //   icon: "https://example-web-push.deno.dev/icon.png",
-          //   requireInteraction: true,
-          //   tag: "permission-granted",
-          //   vibrate: 500,
-          // })
+          new Notification("Permission granted", {
+            body: "You can receive web push notification",
+            icon: "https://example-web-push.deno.dev/icon.png",
+            requireInteraction: true,
+            tag: "permission-granted",
+            vibrate: 500,
+          })
         })
       })
     </script>
