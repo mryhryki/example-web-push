@@ -46,7 +46,7 @@
           }
           const publicKey = '[[PUBLIC-KEY]]';
           const permission = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
+            userVisibleOnly: false,
             applicationServerKey: publicKey
           });
           console.debug("Permission:", permission)
