@@ -1,4 +1,5 @@
 import { encodeBase64 } from "https://deno.land/std@0.221.0/encoding/base64.ts";
+import { SignJWT } from "https://deno.land/x/jose@v5.2.3/index.ts";
 
 const keyPair = await crypto.subtle.generateKey(
   {
@@ -60,6 +61,21 @@ const getMimeType = (filePath: string): string => {
 
 const publishMessage = async (request: Request): Promise<Response> => {
   const { endpoint, message } = await request.json();
-  console.log("Payload:", JSON.stringify({ endpoint, message }));
-  return new Response("OK");
+
+  const jwt = await new SignJWT({})
+    .setProtectedHeader({ alg: "ES256" })
+    .setIssuedAt()
+    .setAudience(new URL(endpoint).origin)
+    .setExpirationTime(Math.floor(Date.now() / 1000) + 900) // 15 min
+    .setSubject("mailto:mryhryki@gmail.com")
+    .sign(keyPair.privateKey);
+
+  const p256ecdsa = await crypto.subtle.exportKey("raw", keyPair.publicKey).then(key => encodeBase64(new Uint8Array(key)));
+
+  return fetch(endpoint, {
+    headers: {
+      "Crypto-Key": `p256ecdsa=${p256ecdsa}`,
+      Authorization: `WebPush ${jwt}`,
+    },
+  });
 };
