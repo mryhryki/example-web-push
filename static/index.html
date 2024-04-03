@@ -16,6 +16,10 @@
       <button id="subscribe-button" style="padding: 0.5rem 1rem; font-size: 1.5rem;">Subscribe</button>
     </p>
 
+    <p style="text-align: center">
+    <pre id="permission-endpoint" style="padding: 0.5rem 1rem; font-size: 1.5rem;"></pre>
+    </p>
+
     <script type="module">
       let registration = null;
       (async() => {
@@ -44,6 +48,8 @@
             applicationServerKey: publicKey
           });
           console.debug("Permission:", permission)
+
+          document.getElementById("permission-endpoint").innerText = permission.endpoint;
 
           // https://developer.mozilla.org/docs/Web/API/Notification/Notification
           new Notification("Permission granted", {
