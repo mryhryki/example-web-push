@@ -46,10 +46,11 @@
           }
           const publicKey = '[[PUBLIC-KEY]]';
           const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: false,
+            userVisibleOnly: true,
             applicationServerKey: publicKey
           });
           console.debug("Subscription:", subscription)
+          // https://web.dev/articles/push-notifications-web-push-protocol?hl=ja#inputs
           const auth = subscription.getKey("auth");
           const p256dh = subscription.getKey("p256dh");
           console.log("Subscription.auth:", auth)
