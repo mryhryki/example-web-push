@@ -43,14 +43,8 @@
             name: 'ECDSA',
             namedCurve: 'P-256'
           }, false, ['sign', 'verify'])
-          const publicKey = await crypto.subtle.importKey(
-            'raw',
-            new Uint8Array('[[PUBLIC-KEY]]'),
-            { name: "ECDSA", namedCurve: "P-256" },
-            false,
-            ["sign", "verify"]
-          );
-          console.debug('###', JSON.stringify({ publicKey}, null, 2))
+          const publicKey = '[[PUBLIC-KEY]]';
+          console.debug('###', JSON.stringify({ publicKey }, null, 2))
 
           const permission = await registration.pushManager.subscribe({
             userVisibleOnly: true,
