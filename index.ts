@@ -1,3 +1,5 @@
+import { encodeBase64 } from "https://deno.land/std@0.221.0/encoding/base64.ts";
+
 const keyPair = await crypto.subtle.generateKey({
   name: "ECDSA",
   namedCurve: "P-256",
@@ -10,7 +12,7 @@ Deno.serve(async (request): Promise<Response> => {
   const html: Uint8Array | null = await Deno.readFile(filePath).catch(() => null);
   if (html != null) {
     const publicKey = await crypto.subtle.exportKey("raw", keyPair.publicKey)
-    const htmlString = new TextDecoder().decode(html).replace("'[[PUBLIC-KEY]]'", JSON.stringify(Array.from(new Uint8Array(publicKey))));
+    const htmlString = new TextDecoder().decode(html).replace("'[[PUBLIC-KEY]]'", encodeBase64(new Uint8Array(publicKey)));
     return new Response(htmlString, {
       status: 200,
       headers: new Headers({
