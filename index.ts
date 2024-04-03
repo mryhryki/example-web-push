@@ -13,7 +13,8 @@ const exportedPublicKey = await crypto.subtle.exportKey(
   "raw",
   keyPair.publicKey,
 );
-const base64EncodedPublicKey = encodeBase64(new Uint8Array(exportedPublicKey));
+const base64EncodedPublicKey = encodeBase64(new Uint8Array(exportedPublicKey))
+  .replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 
 Deno.serve(async (request): Promise<Response> => {
   const { pathname } = new URL(request.url);
@@ -32,10 +33,7 @@ Deno.serve(async (request): Promise<Response> => {
     const htmlString = new TextDecoder().decode(html).replace(
       "'[[PUBLIC-KEY]]'",
       JSON.stringify(
-        base64EncodedPublicKey.replace(/\+/g, "-").replace(/\//g, "_").replace(
-          /=/g,
-          "",
-        ),
+        base64EncodedPublicKey,
       ),
     );
     return new Response(htmlString, {
