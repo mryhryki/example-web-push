@@ -73,11 +73,13 @@ const publishMessage = async (request: Request): Promise<Response> => {
     .sign(keyPair.privateKey);
 
   const headers = new Headers({
+    "Content-Encoding": "aes128gcm",
     "Crypto-Key": `p256ecdsa=${base64EncodedPublicKey}`,
     Authorization: `WebPush ${jwt}`,
     TTL: "900",
   });
+  const body = JSON.stringify({ message });
   // console.log("Headers:", JSON.stringify(Array.from(headers.entries())));
 
-  return fetch(endpoint, { headers });
+  return fetch(endpoint, { headers, body});
 };
