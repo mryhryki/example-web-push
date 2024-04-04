@@ -23,6 +23,8 @@
 
 
     <script type="module">
+      import {encodeBase64} from "./base64.js";
+
       let registration = null;
       (async() => {
         if ("serviceWorker" in navigator) {
@@ -76,7 +78,10 @@
               body: JSON.stringify({
                 endpoint: subscription.endpoint,
                 message: "Hello, world!",
-                subscription: { auth, p256dh },
+                subscription: {
+                  auth: encodeBase64(new Uint8Array(auth)),
+                  p256dh: encodeBase64(new Uint8Array(p256dh)),
+                },
               })
             })
             console.debug("Publish Response:", response)
