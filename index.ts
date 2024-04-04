@@ -62,7 +62,11 @@ const getMimeType = (filePath: string): string => {
 };
 
 const publishMessage = async (request: Request): Promise<Response> => {
-  const { endpoint, message } = await request.json();
+  const { endpoint, message, subscription } = await request.json();
+  const { auth, p256dh } = subscription;
+
+  const salt = new Uint8Array(16);
+  crypto.getRandomValues(salt);
 
   const jwt = await new SignJWT({})
     .setProtectedHeader({ alg: "ES256" })
@@ -74,13 +78,14 @@ const publishMessage = async (request: Request): Promise<Response> => {
 
   const headers = new Headers({
     "Content-Encoding": "aes128gcm",
-    "Crypto-Key": `p256ecdsa=${base64EncodedPublicKey}`,
+    "Crypto-Key": `dh=${p256dh}; p256ecdsa=${base64EncodedPublicKey}`,
     Authorization: `WebPush ${jwt}`,
-    // Encryption: "dh=TODO",
     TTL: "900",
   });
-  // const body = JSON.stringify({ message });
+  const body = JSON.stringify({ message });
+
   // console.log("Headers:", JSON.stringify(Array.from(headers.entries())));
+  // console.log("Body", body);
 
   return fetch(endpoint, { headers });
 };
