@@ -65,9 +65,6 @@ const publishMessage = async (request: Request): Promise<Response> => {
   const { endpoint, message, subscription } = await request.json();
   const { auth, p256dh } = subscription;
 
-  const salt = new Uint8Array(16);
-  crypto.getRandomValues(salt);
-
   const jwt = await new SignJWT({})
     .setProtectedHeader({ alg: "ES256" })
     .setIssuedAt()
@@ -77,15 +74,19 @@ const publishMessage = async (request: Request): Promise<Response> => {
     .sign(keyPair.privateKey);
 
   const headers = new Headers({
-    "Content-Encoding": "aes128gcm",
-    "Crypto-Key": `dh=${p256dh}; p256ecdsa=${base64EncodedPublicKey}`,
+    // "Content-Encoding": "aes128gcm",
+    // "Crypto-Key": `dh=${p256dh}; p256ecdsa=${base64EncodedPublicKey}`,
+    "Crypto-Key": `p256ecdsa=${base64EncodedPublicKey}`,
     Authorization: `WebPush ${jwt}`,
     TTL: "900",
   });
-  const body = JSON.stringify({ message });
-
   // console.log("Headers:", JSON.stringify(Array.from(headers.entries())));
-  // console.log("Body", body);
+
+  const salt = new Uint8Array(16);
+  crypto.getRandomValues(salt);
+
+  const body = JSON.stringify({ message });
+  console.log("Body", body);
 
   return fetch(endpoint, { headers });
 };
