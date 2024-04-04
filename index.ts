@@ -63,7 +63,9 @@ const getMimeType = (filePath: string): string => {
 
 const publishMessage = async (request: Request): Promise<Response> => {
   const { endpoint, message, subscription } = await request.json();
-  const { auth, p256dh } = subscription;
+  console.log("Subscription:", JSON.stringify(subscription));
+  // const auth = decodeBase64(subscription.auth);
+  // const p256dh = decodeBase64(subscription.p256dh);
 
   const jwt = await new SignJWT({})
     .setProtectedHeader({ alg: "ES256" })
