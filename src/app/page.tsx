@@ -3,12 +3,25 @@
 import { usePublish } from "@/app/hooks/usePublish";
 import { useServiceWorker } from "@/app/hooks/useServiceWorker";
 import { useSubscribe } from "@/app/hooks/useSubscribe";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { registration } = useServiceWorker();
-  const { subscribe, subscription } = useSubscribe(registration);
+  const { subscribe, subscription: pushSubscription } = useSubscribe(registration);
+
+  const [endpoint, setEndpoint] = useState("");
+  const [auth, setAuth] = useState("");
+  const [p256dh, setP256dh] = useState("");
+  const subscription = { endpoint, auth, p256dh };
+  const hasValidSubscription = endpoint !== "" && auth !== "" && p256dh !== "";
+
   const { publish } = usePublish(subscription);
+  useEffect(() => {
+    if (pushSubscription == null) return;
+    setEndpoint(pushSubscription.endpoint);
+    setAuth(pushSubscription.auth);
+    setP256dh(pushSubscription.p256dh);
+  }, [pushSubscription]);
 
   const [title, setTitle] = useState("Title");
   const [body, setBody] = useState("Body");
@@ -29,7 +42,7 @@ export default function Home() {
         <h2>Status</h2>
         <ul>
           <li>Service Worker: {registration != null ? "Registered" : "Not registered"}</li>
-          <li>Subscribe: {subscription != null ? "Subscribed" : "Not subscribed"} </li>
+          <li>Subscribe: {pushSubscription != null ? "Subscribed" : "Not subscribed"} </li>
         </ul>
       </section>
 
@@ -44,13 +57,40 @@ export default function Home() {
             Subscribe
           </button>
         </p>
-        {subscription != null && (
-          <ul>
-            <li>Endpoint: <code>{subscription.endpoint.substring(0, 50)}...</code></li>
-            <li>auth: <code>{subscription.auth.substring(0, 5)}...</code></li>
-            <li>p256dh: <code>{subscription.p256dh.substring(0, 12)}...</code></li>
-          </ul>
-        )}
+
+      </section>
+      <section>
+        <h2>Subscription</h2>
+        <p>
+          <label>
+            endpoint<br/>
+            <input
+              type="text"
+              value={endpoint}
+              onChange={(e) => setEndpoint(e.target.value)}
+            />
+          </label>
+        </p>
+        <p>
+          <label>
+            auth<br/>
+            <input
+              type="text"
+              value={auth}
+              onChange={(e) => setAuth(e.target.value)}
+            />
+          </label>
+        </p>
+        <p>
+          <label>
+            p256dh<br/>
+            <input
+              type="text"
+              value={p256dh}
+              onChange={(e) => setP256dh(e.target.value)}
+            />
+          </label>
+        </p>
       </section>
 
       <section>
@@ -62,7 +102,7 @@ export default function Home() {
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              disabled={subscription == null}
+              disabled={!hasValidSubscription}
             />
           </label>
         </p>
@@ -73,7 +113,7 @@ export default function Home() {
               type="text"
               value={body}
               onChange={(e) => setBody(e.target.value)}
-              disabled={subscription == null}
+              disabled={!hasValidSubscription}
             />
           </label>
         </p>
@@ -81,7 +121,7 @@ export default function Home() {
           <button
             onClick={() => publish(title, body)}
             style={{ padding: "0.5em 1em" }}
-            disabled={subscription == null}
+            disabled={!hasValidSubscription}
           >
             Publish
           </button>
