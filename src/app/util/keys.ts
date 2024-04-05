@@ -1,5 +1,2 @@
-const AppPublicKey = "BGVrcQSsXsKIz5qO5VSLkWwPfbAXDaIzUtt-d7wjBvwH4XI7a4mNzxRQarGd_08HokyNuOrGD7Ro3WDHhWyv0Uw";
-const AppPrivateKey = "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgkl_nmFQE3v05rx8xOweENkKCzUO-qcDuuNg-tiw1CWKhRANCAARla3EErF7CiM-ajuVUi5FsD32wFw2iM1Lbfne8Iwb8B-FyO2uJjc8UUGqxnf9PB6JMjbjqxg-0aN1gx4Vsr9FM";
-
-export const getAppPublicKey = () => `${AppPublicKey}`;
-export const getAppPrivateKey = () => `${AppPrivateKey}`;
+export const getAppPublicKey = () => Buffer.from("WmRKc1V2YTNNbDgzSkt5elZ1TlhyeGhRWHptcXFoTFhNbGtGODJBbDV4UQ").toString("base64url");
+export const getAppPrivateKey = () => Buffer.from("QkR5VzAtOThVcHlHX0xTRHNyVlc3Wkl5b1A0UGVGaXprc1NPdmo3QTNhcGlyZE8wTTVnSFBRa3VjRklKVTN4aUtpclA5MVhlR1BIVXh3ZE90TV9weVlV").toString("base64url");
