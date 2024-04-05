@@ -15,6 +15,9 @@ export const usePublish = (subscription: Subscription | null): PublishState => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ ...subscription, title, body }),
+    }).catch((err) => {
+      alert("Failed to publish");
+      console.error(err);
     });
   }, [subscription]);
 
