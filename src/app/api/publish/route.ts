@@ -12,8 +12,8 @@ export async function POST(req: NextRequest) {
   const { title, body, endpoint, auth, p256dh } = await req.json();
 
   const message = {
-    title: title ?? "(No title provided)",
-    body: body ?? "(No body provided)",
+    title: title.trim() || "(No title provided)",
+    body: body.trim() || "(No body provided)",
   };
 
   await webpush.sendNotification({
