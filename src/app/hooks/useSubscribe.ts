@@ -28,8 +28,8 @@ export const useSubscribe = (publicKey: string,registration: ServiceWorkerRegist
 
     setSubscription({
       endpoint: subscription.endpoint,
-      auth: Buffer.from(auth ?? new Uint8Array()).toString("base64"),
-      p256dh: Buffer.from(p256dh ?? new Uint8Array()).toString("base64"),
+      auth: Buffer.from(auth ?? new Uint8Array(0)).toString("base64"),
+      p256dh: Buffer.from(p256dh ?? new Uint8Array(0)).toString("base64"),
     });
   }, [registration]);
 
