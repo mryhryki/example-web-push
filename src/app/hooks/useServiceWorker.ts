@@ -16,7 +16,10 @@ export const useServiceWorker = (): ServiceWorkerState => {
       navigator.serviceWorker
         .register("/service-worker.js")
         .then(setRegistration)
-        .catch(console.error);
+        .catch((err) => {
+          alert("Failed to register service worker");
+          console.error(err);
+        });
     }
   }, []);
 
