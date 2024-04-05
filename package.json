@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-keys": "web-push generate-vapid-keys"
   },
   "dependencies": {
     "@types/web-push": "^3.6.3",
