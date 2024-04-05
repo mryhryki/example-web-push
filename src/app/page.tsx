@@ -46,25 +46,35 @@ export default function Home() {
         </p>
         {subscription != null && (
           <ul>
-            <li>Endpoint: <code>{subscription.endpoint}</code></li>
-            <li>auth: <code>{subscription.auth}</code></li>
-            <li>p256dh: <code>{subscription.p256dh}</code></li>
+            <li>Endpoint: <code>{subscription.endpoint.substring(0, 50)}...</code></li>
+            <li>auth: <code>{subscription.auth.substring(0, 5)}...</code></li>
+            <li>p256dh: <code>{subscription.p256dh.substring(0, 12)}...</code></li>
           </ul>
         )}
       </section>
 
       <section>
-        <h2>Subscribe</h2>
+        <h2>Publish</h2>
         <p>
           <label>
             Title<br />
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              disabled={subscription == null}
+            />
           </label>
         </p>
         <p>
           <label>
             Body:<br />
-            <input type="text" value={body} onChange={(e) => setBody(e.target.value)}/>
+            <input
+              type="text"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              disabled={subscription == null}
+            />
           </label>
         </p>
         <p>
