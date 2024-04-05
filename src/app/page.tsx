@@ -68,7 +68,7 @@ export default function Home() {
         </p>
         <p>
           <label>
-            Body:<br />
+            Body<br />
             <input
               type="text"
               value={body}
