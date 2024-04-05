@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 
+interface ServiceWorkerState {
+  registration: ServiceWorkerRegistration | null;
+}
 
-export const useServiceWorker = (): ServiceWorkerRegistration | null => {
+export const useServiceWorker = (): ServiceWorkerState => {
   const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
   const initialized = useRef<boolean>(false);
 
@@ -18,5 +21,5 @@ export const useServiceWorker = (): ServiceWorkerRegistration | null => {
   }, []);
 
 
-  return registration;
+  return { registration };
 };
