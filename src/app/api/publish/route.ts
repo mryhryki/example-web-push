@@ -1,11 +1,11 @@
-import { getAppPrivateKey, getAppPublicKey } from "@/app/util/keys";
+import { getServerPrivateKey, getServerPublicKey } from "@/app/util/keys";
 import { NextRequest, NextResponse } from "next/server";
 import webpush from "web-push";
 
 webpush.setVapidDetails(
   "mailto:mryhryki@gmail.com",
-  getAppPublicKey(),
-  getAppPrivateKey(),
+  getServerPublicKey(),
+  getServerPrivateKey(),
 );
 
 export async function POST(req: NextRequest) {
