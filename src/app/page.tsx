@@ -1,11 +1,16 @@
 "use client";
 
+import { usePublish } from "@/app/hooks/usePublish";
 import { useServiceWorker } from "@/app/hooks/useServiceWorker";
 import { useSubscribe } from "@/app/hooks/useSubscribe";
+import { getAppPublicKey } from "@/app/util/keys";
+
+const publicKey = getAppPublicKey();
 
 export default function Home() {
   const registration = useServiceWorker();
-  const { subscribe, subscription } = useSubscribe(registration);
+  const { subscribe, subscription } = useSubscribe(publicKey, registration);
+  const { publish } = usePublish(subscription);
 
   return (
     <main>
@@ -51,7 +56,7 @@ export default function Home() {
         <h2>Subscribe</h2>
         <p>
           <button
-            /* TODO: Publish */
+            onClick={publish}
             style={{ padding: "0.5em 1em" }}
             disabled={subscription == null}
           >
