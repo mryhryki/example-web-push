@@ -2,11 +2,11 @@ import { Subscription } from "@/app/hooks/useSubscribe";
 import { useCallback } from "react";
 
 interface PublishState {
-  publish: () => Promise<void>;
+  publish: (title: string, body: string) => Promise<void>;
 }
 
 export const usePublish = (subscription: Subscription | null): PublishState => {
-  const publish = useCallback(async () => {
+  const publish = useCallback(async (title: string, body: string) => {
     if (subscription == null) return;
 
     await fetch("/api/publish", {
@@ -14,7 +14,7 @@ export const usePublish = (subscription: Subscription | null): PublishState => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(subscription),
+      body: JSON.stringify({ ...subscription, title, body }),
     });
   }, [subscription]);
 
