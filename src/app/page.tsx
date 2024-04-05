@@ -61,7 +61,7 @@ export default function Home() {
             <input
               type="text"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(event) => setTitle(event.target.value)}
               disabled={subscription == null}
             />
           </label>
