@@ -3,11 +3,15 @@
 import { usePublish } from "@/app/hooks/usePublish";
 import { useServiceWorker } from "@/app/hooks/useServiceWorker";
 import { useSubscribe } from "@/app/hooks/useSubscribe";
+import { useState } from "react";
 
 export default function Home() {
   const { registration } = useServiceWorker();
   const { subscribe, subscription } = useSubscribe(registration);
   const { publish } = usePublish(subscription);
+
+  const [title, setTitle] = useState("Title");
+  const [body, setBody] = useState("Body");
 
   return (
     <main>
@@ -52,8 +56,20 @@ export default function Home() {
       <section>
         <h2>Subscribe</h2>
         <p>
+          <label>
+            Title<br />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+          </label>
+        </p>
+        <p>
+          <label>
+            Body:<br />
+            <input type="text" value={body} onChange={(e) => setBody(e.target.value)}/>
+          </label>
+        </p>
+        <p>
           <button
-            onClick={publish}
+            onClick={() => publish(title, body)}
             style={{ padding: "0.5em 1em" }}
             disabled={subscription == null}
           >
