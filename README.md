@@ -13,3 +13,16 @@ pnpm dev
 # or
 bun dev
 ```
+
+## Deployment
+
+### Generate VAPID keys (Only once)
+
+```bash
+npm run generate-vapid-keys
+```
+
+### Set environment variables
+
+- `SERVER_PUBLIC_KEY`
+- `SERVER_PRIVATE_KEY`
