@@ -20,13 +20,10 @@ export async function POST(
     getAppPrivateKey(),
   );
 
-  console.debug("#####", JSON.stringify({
-    endpoint,
-    keys: {
-      auth,
-      p256dh,
-    },
-  }, null, 2));
+  const message = {
+    title: "Your Push Payload Title",
+    body: "Your Push Payload Body",
+  };
 
   await webpush.sendNotification({
     endpoint,
@@ -34,9 +31,7 @@ export async function POST(
       auth,
       p256dh,
     },
-  }, "Your Push Payload Text");
+  }, JSON.stringify(message));
 
-  return NextResponse.json({
-    message: "Published!",
-  });
+  return NextResponse.json({ message });
 }
