@@ -11,7 +11,7 @@ interface SubscribeState {
   subscription: Subscription | null;
 }
 
-export const useSubscribe = (publicKey: string,registration: ServiceWorkerRegistration | null): SubscribeState => {
+export const useSubscribe = (registration: ServiceWorkerRegistration | null): SubscribeState => {
   const [subscription, setSubscription] = useState<Subscription | null>(null);
 
   const subscribe = useCallback(async () => {
@@ -19,7 +19,7 @@ export const useSubscribe = (publicKey: string,registration: ServiceWorkerRegist
 
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: publicKey,
+      applicationServerKey: getAppPublicKey(),
     });
 
     // https://web.dev/articles/push-notifications-web-push-protocol?hl=ja#inputs
