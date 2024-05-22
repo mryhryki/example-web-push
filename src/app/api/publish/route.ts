@@ -22,8 +22,9 @@ export async function POST(req: NextRequest) {
       auth,
       p256dh,
     },
+  }, JSON.stringify(message), {
     urgency: "high",
-  }, JSON.stringify(message));
+  });
 
   return NextResponse.json({ message });
 }
