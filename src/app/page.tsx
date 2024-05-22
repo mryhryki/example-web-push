@@ -1,27 +1,28 @@
 "use client";
 
-import { usePublish } from "@/app/hooks/usePublish";
-import { useServiceWorker } from "@/app/hooks/useServiceWorker";
-import { useSubscribe } from "@/app/hooks/useSubscribe";
-import { useEffect, useState } from "react";
+import { usePublish } from '@/app/hooks/usePublish'
+import { useServiceWorker } from '@/app/hooks/useServiceWorker'
+import { useSubscribe } from '@/app/hooks/useSubscribe'
+import { useEffect, useState } from 'react'
+
+interface Subscription {
+  endpoint: string
+  auth: string
+  p256dh: string
+}
 
 export default function Home() {
   const { registration } = useServiceWorker();
-  const { subscribe, subscription: pushSubscription } = useSubscribe(registration);
+  const { subscribe, subscription: mySubscription } = useSubscribe(registration)
 
-  const [endpoint, setEndpoint] = useState("");
-  const [auth, setAuth] = useState("");
-  const [p256dh, setP256dh] = useState("");
-  const subscription = { endpoint, auth, p256dh };
-  const hasValidSubscription = endpoint !== "" && auth !== "" && p256dh !== "";
-
-  const { publish } = usePublish(subscription);
+  const [subscription, setSubscription] = useState<Subscription | null>(mySubscription)
   useEffect(() => {
-    if (pushSubscription == null) return;
-    setEndpoint(pushSubscription.endpoint);
-    setAuth(pushSubscription.auth);
-    setP256dh(pushSubscription.p256dh);
-  }, [pushSubscription]);
+    setSubscription(mySubscription)
+  }, [mySubscription])
+
+  const { endpoint, auth, p256dh } = subscription ?? {}
+  const hasValidSubscription = endpoint !== "" && auth !== "" && p256dh !== "";
+  const { publish } = usePublish(subscription);
 
   const [title, setTitle] = useState("Title");
   const [body, setBody] = useState("Body");
@@ -42,7 +43,7 @@ export default function Home() {
         <h2>Status</h2>
         <ul>
           <li>Service Worker: {registration != null ? "Registered" : "Not registered"}</li>
-          <li>Subscribe: {pushSubscription != null ? "Subscribed" : "Not subscribed"} </li>
+          <li>Subscribe: {subscription != null ? 'Subscribed' : 'Not subscribed'} </li>
         </ul>
       </section>
 
@@ -63,31 +64,12 @@ export default function Home() {
         <h2>Subscription</h2>
         <p>
           <label>
-            endpoint<br/>
-            <input
-              type="text"
-              value={endpoint}
-              onChange={(e) => setEndpoint(e.target.value)}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            auth<br/>
-            <input
-              type="text"
-              value={auth}
-              onChange={(e) => setAuth(e.target.value)}
-            />
-          </label>
-        </p>
-        <p>
-          <label>
-            p256dh<br/>
-            <input
-              type="text"
-              value={p256dh}
-              onChange={(e) => setP256dh(e.target.value)}
+            Subscription:<br />
+            <textarea
+              style={{ width: '100%' }}
+              rows={10}
+              value={JSON.stringify(subscription, null, 2)}
+              onChange={(event) => setSubscription(JSON.parse(event.target.value))}
             />
           </label>
         </p>
